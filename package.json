@@ -1,0 +1,34 @@
+{
+  "name": "mongo-koa-passport",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "co-busboy": "^1.3.1",
+    "config": "^1.21.0",
+    "gulp": "^3.9.1",
+    "gulp-nodemon": "^2.1.0",
+    "jade": "^1.11.0",
+    "koa": "^1.2.0",
+    "koa-bodyparser": "^2.2.0",
+    "koa-ejs": "^3.0.0",
+    "koa-favicon": "^1.2.1",
+    "koa-generic-session": "^1.11.1",
+    "koa-logger": "^1.3.0",
+    "koa-passport": "^1.3.1",
+    "koa-render": "^0.2.1",
+    "koa-router": "^5.4.0",
+    "koa-static": "^2.0.0",
+    "koa-view": "0.0.3",
+    "koa-views": "^4.1.0",
+    "lodash": "^4.13.1",
+    "mongoose": "^4.5.3",
+    "passport-local": "^1.0.0",
+    "run-sequence": "^1.2.2"
+  }
+}
