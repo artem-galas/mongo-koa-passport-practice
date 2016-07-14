@@ -10,9 +10,17 @@ const passport = require('koa-passport');
 const views = require('koa-view');
 const session = require('koa-generic-session')
 const render = require('koa-ejs');
+const fs = require('fs');
 const path = require('path');
 
-app.use(bodyParser());
+app.keys = ['secret']
+
+const middelwares = fs.readdirSync(path.join(__dirname, 'middelwares')).sort();
+console.log (middelwares);
+middelwares.forEach(function(middelware) {
+  console.log(middelware);
+  app.use(require('./middelwares/' + middelware));
+});
 
 app.use(views(__dirname + '/views', { 
   map: {html: 'ejs' }
@@ -24,12 +32,6 @@ render(app, {
   cache: false,
   debug: true
 });
-
-require('./auth');
-app.keys = ['secret']
-app.use(session())
-app.use(passport.initialize())
-app.use(passport.session())
 
 const router = new Router();
 
@@ -56,6 +58,7 @@ router
   })
   .get('/user_view', function*(next) {
     if (this.isAuthenticated()) {
+      console.log (this.session);
       yield this.render('user_view', {user:this.passport.user});
     } else {
       this.redirect('sign_up');

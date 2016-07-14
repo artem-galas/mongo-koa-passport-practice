@@ -1,6 +1,6 @@
 <div class="container">
   <div class="col-lg-8 col-md-8">
-    <% if (user) { %>
+    <% if (typeof user === 'object') { %>
       <h2>My User <%= user.username %></h2>
     <% } %>
     <p>
