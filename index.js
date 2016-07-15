@@ -16,9 +16,8 @@ const path = require('path');
 app.keys = ['secret']
 
 const middelwares = fs.readdirSync(path.join(__dirname, 'middelwares')).sort();
-console.log (middelwares);
+
 middelwares.forEach(function(middelware) {
-  console.log(middelware);
   app.use(require('./middelwares/' + middelware));
 });
 
@@ -52,17 +51,35 @@ router
   })
   .post('/sign_in', function*(next) {
     yield passport.authenticate('local', {
-      successRedirect: '/user_view',
+      successRedirect: '/profile',
       failureRedirect: '/sign_up'
     });
   })
-  .get('/user_view', function*(next) {
+  .get('/profile', function*(next) {
     if (this.isAuthenticated()) {
-      console.log (this.session);
-      yield this.render('user_view', {user:this.passport.user});
+      yield this.render('profile', {user:this.passport.user});
     } else {
       this.redirect('sign_up');
     }
+  })
+  .get('/profile/edit', function*(next) {
+    if (this.isAuthenticated()){
+      yield this.render('profile_edit', {user: this.passport.user});
+    } else {
+      this.redirect('sign_up');
+    }
+  })
+  .post('/profile/edit', function*(next) {
+    let user = yield User.findById(this.passport._id);
+    console.log (user);
+    user.update({username: this.request.body.username, email: this.request.body.email}, function(err, user){
+      if (err){
+        console.log(err);
+      } else {
+        console.log (user)
+      }
+    });
+
   })
   .get('/logout', function*(next) {
     this.logout()
