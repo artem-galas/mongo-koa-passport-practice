@@ -1,6 +1,7 @@
 <div class="container">
   <div class="col-lg-8 col-md-8">
-    <form class="profile-edit-form" action="/profile/edit" method="post">
+    <form class="profile-edit-form" action="/profile/update" method="post">
+      <input type="hidden" name=user_id value="<%= user.id %>">
       <div class="form-group">
         <label for="username">User Name</label>
         <input id="username" class="form-control" type="text" name="username" value="<%= user.username %>">

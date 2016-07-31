@@ -6,6 +6,7 @@ const bodyParser = require('koa-bodyparser')
 const mongoose = require('./libs/mongooseConfig');
 const Router = require('koa-router');
 const User = require('./models/user');
+const Post = require('./models/post');
 const passport = require('koa-passport');
 const views = require('koa-view');
 const session = require('koa-generic-session')
@@ -35,6 +36,9 @@ render(app, {
 const router = new Router();
 
 router
+  .get('/', function*(next) {
+    yield this.render('home');
+  })
   .get('/sign_up', function*(next) {
     yield this.render('sign_up');
   })
@@ -69,17 +73,27 @@ router
       this.redirect('sign_up');
     }
   })
-  .post('/profile/edit', function*(next) {
-    let user = yield User.findById(this.passport._id);
-    console.log (user);
-    user.update({username: this.request.body.username, email: this.request.body.email}, function(err, user){
-      if (err){
-        console.log(err);
-      } else {
-        console.log (user)
-      }
-    });
-
+  .post('/profile/update', function*(next) {
+    let user_id = this.request.body.user_id
+    let user = yield User.findById(user_id);
+    yield user.update({username: this.request.body.username, email: this.request.body.email});
+    this.redirect('/profile');
+  })
+  .get('/users/posts', function*(next){
+    yield this.render('posts/index');
+  })
+  .get('/users/posts/new', function*(next){
+    yield this.render('posts/new');
+  })
+  .post('/users/posts/create', function*(next) {
+    console.log(this.session.passport.user);
+    let user_id = this.session.passport.user
+    let user = yield User.findById(user_id);
+    yield user.posts.create({
+      title: this.request.body.title,
+      text: this.request.body.text
+    })
+    console.log(this.request.body);
   })
   .get('/logout', function*(next) {
     this.logout()

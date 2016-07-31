@@ -1,0 +1,9 @@
+<ul>
+  <% user.posts.each(function(post){ %>
+      <li>
+        <h3> <%= post.title %> <h3>
+        <a href=`/users/posts/${post.id}`> Show post </a>
+        <a href=`/users/posts/${post.id}/edit`> Edit post </a>
+      </li>
+  <% }) %>
+</ul>
