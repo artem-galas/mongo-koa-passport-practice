@@ -3,7 +3,7 @@
       <li>
         <h3> <%= post.title %> </h3>
         <p><a href='/posts/<%= post._id %>'> Show post </a></p>
-        <p><a href='<%= post._id %>/edit'> Edit post </a></p>
+        <p><a href='/users/posts/<%= post._id %>/edit'> Edit post </a></p>
       </li>
   <% }) %>
 </ul>

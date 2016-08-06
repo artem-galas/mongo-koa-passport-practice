@@ -48,11 +48,12 @@ router
     }
     yield* next;
   })
+  .prefix('/users')
   .get('/', function*(next) {
     yield this.render('home');
   })
   .get('/sign_up', function*(next) {
-    yield this.render('sign_up');
+    yield this.render('/users/sign_up');
   })
   .post('/sign_up', function*(next){
     let user = yield User.create({
@@ -63,42 +64,42 @@ router
     this.body = user.toObject();
   })
   .get('/sign_in', function*(next){
-    yield this.render('sign_in');
+    yield this.render('/users/sign_in');
   })
   .post('/sign_in', function*(next) {
     yield passport.authenticate('local', {
       successRedirect: '/profile',
-      failureRedirect: '/sign_up'
+      failureRedirect: '/users/sign_up'
     });
   })
   .get('/profile', function*(next) {
     if (this.isAuthenticated()) {
-      yield this.render('profile', {user:this.passport.user});
+      yield this.render('/users/show', {user:this.passport.user});
     } else {
-      this.redirect('sign_up');
+      this.redirect('/users/sign_up');
     }
   })
   .get('/profile/edit', function*(next) {
     if (this.isAuthenticated()){
-      yield this.render('profile_edit', {user: this.passport.user});
+      yield this.render('/users/edit', {user: this.passport.user});
     } else {
-      this.redirect('sign_up');
+      this.redirect('/users/sign_up');
     }
   })
   .post('/profile/update', function*(next) {
     let user_id = this.request.body.user_id
     let user = yield User.findById(user_id);
     yield user.update({username: this.request.body.username, email: this.request.body.email});
-    this.redirect('/profile');
+    this.redirect('/users/profile');
   })
-  .get('/users/posts', function*(next){
+  .get('/posts', function*(next){
     let user = yield User.findById(this.session.passport.user).populate('posts');
     yield this.render('posts/index', {user: user});
   })
-  .get('/users/posts/new', function*(next){
+  .get('/posts/new', function*(next){
     yield this.render('posts/new');
   })
-  .post('/users/posts/create', function*(next) {
+  .post('/posts/create', function*(next) {
     let user_id = this.session.passport.user
     let user = yield User.findById(user_id);
     let post = yield Post.create({
@@ -109,10 +110,6 @@ router
     user.posts.push(post);
     yield user.save()
     this.redirect('/users/posts');
-  })
-  .get('/posts/:postId', function*(next) {
-    let post = yield Post.findById(this.postId._id).populate('comments');
-    yield this.render('posts/show', {post: post});
   })
   .get('/posts/:postId/edit', function*(next) {
     yield this.render('posts/edit', {post: this.postId});
@@ -141,5 +138,14 @@ router
     this.redirect('/sign_in')
   })
 
+const postRouter = new Router();
+
+postRouter
+  .get('/posts/:postId', function*(next) {
+    let post = yield Post.findById(this.params.postId).populate('comments');
+    yield this.render('posts/show', {post: post});
+  })
+
+app.use(postRouter.routes());
 app.use(router.routes());
 app.listen(3000)
