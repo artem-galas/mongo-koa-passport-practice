@@ -5,7 +5,8 @@ const postSchema = new mongoose.Schema({
   },
   text: {
     type: String
-  }
+  },
+  comments: [{type: mongoose.Schema.ObjectId, ref: 'Comment'}]
 })
 
 module.exports = mongoose.model('Post', postSchema);

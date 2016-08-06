@@ -1,19 +1,17 @@
-<div class="container">
-  <div class="col-lg-8 col-md-8">
-    <% if (typeof user === 'object') { %>
-      <h2>Hi <span style="color:#398439"> <%= user.username %> </span> you amwesome</h2>
-      <div>
-        <p>Your user data:</p>
-        <ul>
-          <li>Email: <%= user.email %></li>
-        </ul>
-      </div>
-      <a href="/profile/edit">Edit your profile</a>
-      <a href="/users/posts">Show you posts</a>
-      <a href="/users/posts/new">Create new post</a>
-    <% } %>
-    <p>
-      <a href="/logout">Logout</a>
-    </p>
-  </div>
+<div class="col-lg-8 col-md-8">
+  <% if (typeof user === 'object') { %>
+    <h2>Hi <span style="color:#398439"> <%= user.username %> </span> you amwesome</h2>
+    <div>
+      <p>Your user data:</p>
+      <ul>
+        <li>Email: <%= user.email %></li>
+      </ul>
+    </div>
+    <a href="/profile/edit">Edit your profile</a>
+    <a href="/users/posts">Show you posts</a>
+    <a href="/users/posts/new">Create new post</a>
+  <% } %>
+  <p>
+    <a href="/logout">Logout</a>
+  </p>
 </div>
